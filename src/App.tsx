@@ -86,6 +86,7 @@ function App() {
   
   return (
     <div className='h-full w-full flex flex-col gap-20 items-center justify-center'>
+      <span className='absolute top-10 right-10 text-xl'>remain: {state.words ? Object.keys(state.words).length : ''}</span>
       <h1 className='text-6xl font-bold'>{state.currentWord}</h1>
       <div className='flex flex-col gap-3 text-2xl'>
         {state.currentChoices.map((choice: string, index: number) => (
