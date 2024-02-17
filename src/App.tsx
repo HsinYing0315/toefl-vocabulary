@@ -86,7 +86,7 @@ function App() {
   
   return (
     <div className='h-full w-full flex flex-col gap-20 items-center justify-center'>
-      <h1 className='text-8xl font-bold'>{state.currentWord}</h1>
+      <h1 className='text-6xl font-bold'>{state.currentWord}</h1>
       <div className='flex flex-col gap-3 text-2xl'>
         {state.currentChoices.map((choice: string, index: number) => (
           <button id={choice} key={index} className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded`} onClick={() => nextOne(choice)}>{choice}</button>
