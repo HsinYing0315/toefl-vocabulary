@@ -6,7 +6,6 @@ interface State {
   words: {[key: string]: string} | null;
   currentWord: string;
   currentChoices: string[];
-  correct: boolean | null;
 }
 
 const shuffle = (array: string[]): string[] => {
@@ -31,11 +30,6 @@ const reducer = (state: any, action: any) => {
           action.payload[Object.keys(action.payload)[Math.floor(random * Object.keys(action.payload).length)]]
         ]),
       }
-    case 'IS_CORRECT':
-      return { 
-        ...state,
-        correct: action.payload
-      };
     default:
       return state;
   }
@@ -45,7 +39,6 @@ function App() {
     words: null,
     currentWord: '',
     currentChoices: [],
-    correct: null
   }
   const [state, dispatch] = useReducer(reducer, initialState)
   useEffect(() => {
@@ -63,21 +56,28 @@ function App() {
     const data = await response.json();
     return data
   }
-  
-  const handleIsCorrect = (choice: string) => {
-    dispatch({
-      type: 'IS_CORRECT',
-      payload: choice === state.words[state.currentWord]
-    })
-  }
+   
   const nextOne = (choice: string) => {
-    handleIsCorrect(choice);
-    dispatch({
-      type: 'INITIALIZE',
-      payload: {
-        ...state.words
-      }
-    })
+    const chosen = document.getElementById(choice)
+    const answer = document.getElementById(state.words[state.currentWord])
+    let result: string[] = []
+    if (choice === state.words[state.currentWord]) {
+      result = ['bg-green-500', 'hover:bg-green-700']
+    } else {
+      answer?.classList.add('bg-green-500', 'hover:bg-green-700')
+      result = ['bg-red-500', 'hover:bg-red-700']
+    }
+    chosen?.classList.add(...result)
+    setTimeout(() => {
+      dispatch({
+        type: 'INITIALIZE',
+        payload: {
+          ...state.words
+        }
+      })
+      answer?.classList.remove('bg-green-500', 'hover:bg-green-700')
+      chosen?.classList.remove(...result)
+    }, 2000)
   }
   
   return (
@@ -85,7 +85,7 @@ function App() {
       <h1 className='text-8xl font-bold'>{state.currentWord}</h1>
       <div className='flex flex-col gap-3 text-2xl'>
         {state.currentChoices.map((choice: string, index: number) => (
-          <button key={index} className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' onClick={() => nextOne(choice)}>{choice}</button>
+          <button id={choice} key={index} className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded`} onClick={() => nextOne(choice)}>{choice}</button>
         ))} 
       </div>
     </div>
