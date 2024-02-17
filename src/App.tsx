@@ -63,6 +63,10 @@ function App() {
     let result: string[] = []
     if (choice === state.words[state.currentWord]) {
       result = ['bg-green-500', 'hover:bg-green-700']
+      delete state.words[state.currentWord]
+      if (Object.keys(state.words).length === 0) {
+        alert('finished!')
+      }
     } else {
       answer?.classList.add('bg-green-500', 'hover:bg-green-700')
       result = ['bg-red-500', 'hover:bg-red-700']
